@@ -13,7 +13,7 @@ namespace JiebaNet.Segmenter.Tests
         public void CutDemo()
         {
             var segmenter = new JiebaSegmenter();
-            var segments = segmenter.Cut("我来到北京清华大学", cutAll: true);
+            var segments = segmenter.Cut("我来到北京的清华大学，清华大学是一个很好的学校。我测试 感觉上 有点 问题", cutAll: true);
             Console.WriteLine("【全模式】：{0}", string.Join("/ ", segments));
 
             segments = segmenter.Cut("我来到北京清华大学");  // 默认为精确模式

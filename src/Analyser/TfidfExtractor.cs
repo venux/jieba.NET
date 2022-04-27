@@ -23,11 +23,6 @@ namespace JiebaNet.Analyser
         {
             Segmenter = segmenter.IsNull() ? new JiebaSegmenter() : segmenter;
             PosSegmenter = new PosSegmenter(Segmenter);
-            SetStopWords(ConfigManager.StopWordsFile);
-            if (StopWords.IsEmpty())
-            {
-                StopWords.UnionWith(DefaultStopWords);
-            }
 
             Loader = new IdfLoader(DefaultIdfFile);
 
@@ -65,7 +60,7 @@ namespace JiebaNet.Analyser
             foreach (var word in words)
             {
                 var w = word;
-                if (string.IsNullOrEmpty(w) || w.Trim().Length < 2 || StopWords.Contains(w.ToLower()))
+                if (string.IsNullOrEmpty(w) || w.Trim().Length < 2 || StopWordHelp.StopWords.Contains(w.ToLower()))
                 {
                     continue;
                 }

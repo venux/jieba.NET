@@ -53,22 +53,22 @@ namespace JiebaNet.Segmenter
             var reHan = cutAll ? RegexChineseCutAll : RegexChineseDefault;
             var reSkip = cutAll ? RegexSkipCutAll : RegexSkipDefault;
             var cutMethod = cutAll ? CutAll : hmm ? CutDag : (Func<string, IEnumerable<string>>)CutDagWithoutHmm;
-            return CutIt(text, cutMethod, reHan, reSkip, cutAll);
+            return WordsExtension.RemoveUnusefulWords(CutIt(text, cutMethod, reHan, reSkip, cutAll));
         }
-        
+
         public IEnumerable<IEnumerable<string>> CutInParallel(IEnumerable<string> texts, bool cutAll = false, bool hmm = true)
         {
             var reHan = cutAll ? RegexChineseCutAll : RegexChineseDefault;
             var reSkip = cutAll ? RegexSkipCutAll : RegexSkipDefault;
             var cutMethod = cutAll ? CutAll : hmm ? CutDag : (Func<string, IEnumerable<string>>)CutDagWithoutHmm;
 
-            return texts.AsParallel().AsOrdered().Select(text => CutIt(text, cutMethod, reHan, reSkip, cutAll));
+            return texts.AsParallel().AsOrdered().Select(text => WordsExtension.RemoveUnusefulWords(CutIt(text, cutMethod, reHan, reSkip, cutAll)));
         }
-        
+
         public IEnumerable<string> CutInParallel(string text, bool cutAll = false, bool hmm = true)
         {
             var lines = text.SplitLines();
-            return CutInParallel(lines, cutAll, hmm).SelectMany(words => words);
+            return WordsExtension.RemoveUnusefulWords(CutInParallel(lines, cutAll, hmm).SelectMany(words => words));
         }
 
         public IEnumerable<string> CutForSearch(string text, bool hmm = true)
@@ -105,18 +105,18 @@ namespace JiebaNet.Segmenter
                 result.Add(w);
             }
 
-            return result;
+            return WordsExtension.RemoveUnusefulWords(result);
         }
-        
+
         public IEnumerable<IEnumerable<string>> CutForSearchInParallel(IEnumerable<string> texts, bool hmm = true)
         {
-            return texts.AsParallel().AsOrdered().Select(line => CutForSearch(line, hmm));
+            return texts.AsParallel().AsOrdered().Select(line => WordsExtension.RemoveUnusefulWords(CutForSearch(line, hmm)));
         }
-        
+
         public IEnumerable<string> CutForSearchInParallel(string text, bool hmm = true)
         {
             var lines = text.SplitLines();
-            return CutForSearchInParallel(lines, hmm).SelectMany(words => words);
+            return WordsExtension.RemoveUnusefulWords(CutForSearchInParallel(lines, hmm).SelectMany(words => words));
         }
 
         public IEnumerable<Token> Tokenize(string text, TokenizerMode mode = TokenizerMode.Default, bool hmm = true)
@@ -259,7 +259,7 @@ namespace JiebaNet.Segmenter
                 }
             }
 
-            return words;
+            return WordsExtension.RemoveUnusefulWords(words);
         }
 
         internal IEnumerable<string> CutDag(string sentence)
@@ -297,7 +297,7 @@ namespace JiebaNet.Segmenter
                 AddBufferToWordList(tokens, buf);
             }
 
-            return tokens;
+            return WordsExtension.RemoveUnusefulWords(tokens);
         }
 
         internal IEnumerable<string> CutDagWithoutHmm(string sentence)
@@ -338,7 +338,7 @@ namespace JiebaNet.Segmenter
                 words.Add(buf);
             }
 
-            return words;
+            return WordsExtension.RemoveUnusefulWords(words);
         }
 
         internal IEnumerable<string> CutIt(string text, Func<string, IEnumerable<string>> cutMethod,
@@ -384,7 +384,7 @@ namespace JiebaNet.Segmenter
                 }
             }
 
-            return result;
+            return WordsExtension.RemoveUnusefulWords(result);
         }
 
         #endregion

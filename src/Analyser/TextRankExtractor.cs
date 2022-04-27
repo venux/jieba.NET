@@ -22,7 +22,7 @@ namespace JiebaNet.Analyser
         {
             return allowPos.Contains(wp.Flag)
                    && wp.Word.Trim().Length >= 2
-                   && !StopWords.Contains(wp.Word.ToLower());
+                   && !StopWordHelp.StopWords.Contains(wp.Word.ToLower());
         }
 
         public TextRankExtractor()
@@ -31,11 +31,6 @@ namespace JiebaNet.Analyser
 
             Segmenter = new JiebaSegmenter();
             PosSegmenter = new PosSegmenter(Segmenter);
-            SetStopWords(ConfigManager.StopWordsFile);
-            if (StopWords.IsEmpty())
-            {
-                StopWords.UnionWith(DefaultStopWords);
-            }
         }
 
         public override IEnumerable<string> ExtractTags(string text, int count = 20, IEnumerable<string> allowPos = null)
